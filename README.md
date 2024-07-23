@@ -1,4 +1,6 @@
 # Fantasy-Projector
+
+Description:
 - Utilized Python, Pandas, Openpyxl, Excel, and BeautifulSoup4, to WebScrape weekly NFL player data and convert it to an Excel spreadsheet. 
 - Gives a prediction of how many Fantasy Football points a player will score based on opponent defense statistics and rankings, and individual player data from previous weeks.
 
