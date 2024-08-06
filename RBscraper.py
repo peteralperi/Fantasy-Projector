@@ -16,7 +16,7 @@ rbplayers_list9= []
 
 
 for week in range(9,19):
-    RBurl = 'https://www.fantasypros.com/nfl/stats/rb.php?year=2022&week={}&range=week'.format(week)
+    RBurl = 'https://www.fantasypros.com/nfl/stats/rb.php?year=2023&week={}&range=week'.format(week)
 
     RBresponse = requests.get(RBurl)
     RBsoup = BeautifulSoup(RBresponse.text, 'html.parser')
@@ -175,26 +175,26 @@ sheet_name = "RB"
 df_mapping = {"A1": RBdf, "A275": RBdf1, "A550": RBdf2, "A825":RBdf3, "A1100":RBdf4, "A1375":RBdf5, "A1650":RBdf6, "A1925":RBdf7, "A2200":RBdf8, "A2475":RBdf9}
 
 #open excel in background
-with xw.App(visible=False) as app:
-    wb = app.books.open(wb_name)
+# with xw.App(visible=False) as app:
+#     wb = app.books.open(wb_name)
 
 
-    # add sheet if it doesnt exist
-    current_sheets = [sheet.name for sheet in wb.sheets]
-    if sheet_name not in current_sheets:
-        wb.sheets.add(sheet_name)
+#     # add sheet if it doesnt exist
+#     current_sheets = [sheet.name for sheet in wb.sheets]
+#     if sheet_name not in current_sheets:
+#         wb.sheets.add(sheet_name)
     
-    #write dataframe to cell range
-    for cell_target, df in df_mapping.items():
-        wb.sheets(sheet_name).range(cell_target).options(pd.DataFrame, index = False).value = df
+#     #write dataframe to cell range
+#     for cell_target, df in df_mapping.items():
+#         wb.sheets(sheet_name).range(cell_target).options(pd.DataFrame, index = False).value = df
     
-    wb.save()
+#     wb.save()
 
 
 
-RBdf.to_csv("bigboy.csv")    
+RBdf.to_csv("playerData.csv")    
             
-RBdf1.to_csv("bigboy.csv")
+#RBdf1.to_csv("bigboy.csv")
 
 
     

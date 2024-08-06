@@ -19,7 +19,6 @@ for row in rows:
     players_list.append(dic)
 
 
-
 df = pd.DataFrame(players_list)
 df.to_excel("players.xlsx")
 df.to_csv("players.csv")
