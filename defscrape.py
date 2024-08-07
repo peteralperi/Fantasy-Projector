@@ -43,24 +43,23 @@ for i in range(0,2):
 df = pd.DataFrame(players_list)
 df1 = pd.DataFrame(players_list1)
             
-### need to add receiving stats, just put if == 2: and copy and paste the dic. also need to make sure the for loop iterates through range (0,3 ) not (0,2). also need to add another playerslist, df, and add it to df mapping
 
-wb_name = "bigboy.xlsx"
-sheet_name = "Defense"
-df_mapping = {"A1": df, "G1": df1}
+# wb_name = "bigboy.xlsx"
+# sheet_name = "Defense"
+# df_mapping = {"A1": df, "G1": df1}
 
-#open excel in background
-with xw.App(visible=False) as app:
-    wb = app.books.open(wb_name)
+# #open excel in background
+# with xw.App(visible=False) as app:
+#     wb = app.books.open(wb_name)
 
 
-    # add sheet if it doesnt exist
-    current_sheets = [sheet.name for sheet in wb.sheets]
-    if sheet_name not in current_sheets:
-        wb.sheets.add(sheet_name)
+#     # add sheet if it doesnt exist
+#     current_sheets = [sheet.name for sheet in wb.sheets]
+#     if sheet_name not in current_sheets:
+#         wb.sheets.add(sheet_name)
     
-    #write dataframe to cell range
-    for cell_target, df in df_mapping.items():
-        wb.sheets(sheet_name).range(cell_target).options(pd.DataFrame, index = False).value = df
+#     #write dataframe to cell range
+#     for cell_target, df in df_mapping.items():
+#         wb.sheets(sheet_name).range(cell_target).options(pd.DataFrame, index = False).value = df
     
-    wb.save()
+#     wb.save()
