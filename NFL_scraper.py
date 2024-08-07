@@ -9,9 +9,4 @@ Quarterback (QB), Running Back (RB), Wide Receiver (WR), Tight End (TE), and Kic
 
 
 
-
-
-
-
-
 '''
