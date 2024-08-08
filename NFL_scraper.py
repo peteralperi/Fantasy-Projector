@@ -74,8 +74,8 @@ def qb_scraper():
     df2 = pd.DataFrame(qb_list)
 
     df.to_csv("playerData.csv")               
-    df1.to_csv("playerData.csv")
-    df2.to_csv("playerData.csv")
+    df1.to_csv("playerData.csv", mode= "a")
+    df2.to_csv("playerData.csv", mode= "a")
 
 def wr_scraper(): 
     wr_week1 = []
