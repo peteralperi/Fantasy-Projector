@@ -12,10 +12,8 @@ def read_playerData(file_path, player_name):
                     player_data.append(row)
     return player_data
 
-#,Player,rYds,rTds,recs,recYds,recTds,fumbs,games
-#,Player,recs,recYds,recTds,rYds,rTds,fumbs,games
+
 def avg_stats(data, pos):
-    print(data)
     if pos == 'wr' or pos == 'rb' or pos =='te': #wide receivers, running backs, and tight ends all share the same fantasy football relevant stats, called wr_stats
         wr_stats = {
             'rYds': 0,
@@ -92,7 +90,7 @@ def avg_stats(data, pos):
             'tier2': 0,
             'tier3': 0,
             'tier4': 0,
-            'tieir5': 0,
+            'tier5': 0,
             'XPT': 0,
             'games': 0
         }
@@ -105,9 +103,9 @@ def avg_stats(data, pos):
             k_stats['tier2'] += int(game[5])
             k_stats['tier3'] += int(game[6])
             k_stats['tier4'] += int(game[7])
-            k_stats['tier5'] += int(game[9])
-            k_stats['XPT'] += int(game[10])
-            k_stats['games'] += int(game[11])
+            k_stats['tier5'] += int(game[8])
+            k_stats['XPT'] += int(game[9])
+            k_stats['games'] += int(game[10])
         
         for key in k_stats.keys():
             if key != 'games':
@@ -117,12 +115,43 @@ def avg_stats(data, pos):
         
         
 
+
+
+def fantasy_conversion(avg, pos):
+    base_fantasy = 0
+    if pos == 'wr' or pos == 'te' or pos == 'rb':
+        base_fantasy += avg['rYds'] / 10
+        base_fantasy += avg['rTds'] * 6
+        base_fantasy += avg['recs'] 
+        base_fantasy += avg['recYds'] / 10
+        base_fantasy += avg['recTds'] * 6
+        base_fantasy += avg['fumbs'] * -2
+    
+    if pos == 'qb':
+        base_fantasy += avg['pYds'] / 25
+        base_fantasy += avg['pTds'] * 4
+        base_fantasy += avg['ints'] * -2
+        base_fantasy += avg['rYds'] / 10
+        base_fantasy += avg['rTds'] * 6
+        base_fantasy += avg['fumbs'] * -2
+    
+    if pos == 'k':
+        base_fantasy += avg['tier1'] * 3
+        base_fantasy += avg['tier2'] * 3.5
+        base_fantasy += avg['tier3'] * 3.5
+        base_fantasy += avg['tier4'] * 4.5
+        base_fantasy += avg['tier5'] * 5.5
+        base_fantasy += avg['XPT'] 
+            
+    return base_fantasy
+
 def main():
     file = "playerData.csv"
-    player = "George Pickens"
+    player = "Chris Boswell"
     data = read_playerData(file, player)
-    result = avg_stats(data, 'wr')
-    print(result)
+    avg = avg_stats(data, 'k')
+    fantasy_avg = fantasy_conversion(avg, 'k')
+    
     
 
 if __name__ == "__main__":
