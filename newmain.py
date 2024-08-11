@@ -7,13 +7,9 @@ def read_playerData(file_path, player_name):
     with open(file_path, mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         player_data = []
-        count = 0
         for row in csv_reader:
-            count += 1
             if row[1] == player_name:
-                    player_data.append(row)
-            if count == 1521:
-                print(row[1])
+                    player_data.append(row) 
     return player_data
 
 
@@ -150,12 +146,12 @@ def fantasy_conversion(avg, pos):
     return base_fantasy
 
 def main():
-    file = "Fantasy-Projector/playerData.csv"
-    player = "Chris Boswell"
+    file = "playerData.csv"
+    player = "Patrick Mahomes II"
     data = read_playerData(file, player)
-    avg = avg_stats(data, 'k')
-    fantasy_avg = fantasy_conversion(avg, 'k')
-    print()
+    avg = avg_stats(data, 'qb')
+    fantasy_avg = fantasy_conversion(avg, 'qb')
+    print(fantasy_avg)
     
 
 if __name__ == "__main__":
