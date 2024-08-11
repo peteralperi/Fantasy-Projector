@@ -73,9 +73,9 @@ def qb_scraper():
     df1 = pd.DataFrame(qb_list)
     df2 = pd.DataFrame(qb_list)
 
-    df.to_csv("playerData.csv")               
-    df1.to_csv("playerData.csv", mode= "a")
-    df2.to_csv("playerData.csv", mode= "a")
+    df.to_csv("Fantasy-Projector/playerData.csv")               
+    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
 
 def wr_scraper(): 
     wr_week1 = []
@@ -128,9 +128,9 @@ def wr_scraper():
     df = pd.DataFrame(wr_week1)
     df1 = pd.DataFrame(wr_week2)
     df2 = pd.DataFrame(wr_week3)
-    df.to_csv("playerData.csv", mode= "a")          
-    df1.to_csv("playerData.csv", mode= "a")
-    df2.to_csv("playerData.csv", mode= "a")
+    df.to_csv("Fantasy-Projector/playerData.csv", mode= "a")          
+    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
 
 def rb_scraper():
     rb_week1 = []
@@ -189,9 +189,9 @@ def rb_scraper():
     RBdf1 = pd.DataFrame(rb_week2)
     RBdf2 = pd.DataFrame(rb_week3)
 
-    RBdf.to_csv("playerData.csv", mode= "a")
-    RBdf1.to_csv("playerData.csv", mode= "a")    
-    RBdf2.to_csv("playerData.csv", mode= "a")    
+    RBdf.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    RBdf1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")    
+    RBdf2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")    
 
 def te_scraper():
     wr_week1 = []
@@ -248,9 +248,9 @@ def te_scraper():
     df1 = pd.DataFrame(wr_week2)
     df2 = pd.DataFrame(wr_week3)
 
-    df.to_csv("playerData.csv", mode= "a")             
-    df1.to_csv("playerData.csv", mode= "a")
-    df2.to_csv("playerData.csv", mode= "a")
+    df.to_csv("Fantasy-Projector/playerData.csv", mode= "a")             
+    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
 
 
 def k_scraper():
@@ -314,9 +314,9 @@ def k_scraper():
     df1 = pd.DataFrame(k_week2)
     df2 = pd.DataFrame(k_week3)
 
-    df.to_csv("playerData.csv", mode= "a")  
-    df1.to_csv("playerData.csv", mode= "a")
-    df2.to_csv("playerData.csv", mode= "a")
+    df.to_csv("Fantasy-Projector/playerData.csv", mode= "a")  
+    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
 
 
 
@@ -326,7 +326,7 @@ def main():
     wr_scraper()
     te_scraper()
     k_scraper()
-    print("scraped the data")
+    print("Done.")
     
 
 if __name__ == "__main__":
