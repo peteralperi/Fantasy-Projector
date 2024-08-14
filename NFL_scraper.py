@@ -334,10 +334,13 @@ def player_scraper():
         dic = {}
         player_td = row.find('td', {'data-stat': 'player'})
         team_td = row.find('td', {'data-stat': 'team'})
+        pos_td = row.find('td', {'data-stat': 'fantasy_pos'})
 
         if player_td and team_td:
             player_name = player_td.get_text()
             team_name = team_td.get_text()
+            position = pos_td.get_text()
+            
             if '*' in player_name:
                 player_name = player_name.replace('*', '')
             
@@ -346,6 +349,7 @@ def player_scraper():
             
             dic['Player'] = player_name
             dic['Team'] = team_name
+            dic['Position'] = position
             players_list.append(dic)
         
 
