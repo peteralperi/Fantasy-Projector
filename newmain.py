@@ -1,7 +1,23 @@
 import csv
 from datetime import datetime
 
-
+def get_position(file, player_name):
+    with open(file, mode='r', newline='') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            if row[1] == player_name:
+                    position = row[3]
+    if position:
+        return position
+    
+def get_team(file, player_name):
+    with open(file, mode='r', newline='') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            if row[1] == player_name:
+                    team = row[2]
+    if team:
+        return team
 
 def read_playerData(file_path, player_name):
     with open(file_path, mode='r', newline='') as file:
@@ -149,12 +165,18 @@ def get_week():
     cur_date = datetime.now()
     
 def main():
-    file = "playerData.csv"
-    player = "Patrick Mahomes II"
-    data = read_playerData(file, player)
-    avg = avg_stats(data, 'qb')
-    fantasy_avg = fantasy_conversion(avg, 'qb')
-    get_week()
+    data_file = "playerData.csv"
+    pos_file = "Players.csv"
+    player = "Tyreek Hill" #This variable will be given from website
+    position = get_position(pos_file, player)
+    position = position.lower() #Converts to lowercase for other functions
+    team = get_team(pos_file, player)
+
+    player_stats = read_playerData(data_file, player)
+    player_avg = avg_stats(player_stats, position)
+    fantasy_avg = fantasy_conversion(player_avg, position)
+    # get_week()
+    print(fantasy_avg)
     
 
 if __name__ == "__main__":
