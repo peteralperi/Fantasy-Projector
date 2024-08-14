@@ -1,5 +1,5 @@
 import csv
-
+from datetime import datetime
 
 
 
@@ -145,13 +145,16 @@ def fantasy_conversion(avg, pos):
             
     return base_fantasy
 
+def get_week():
+    cur_date = datetime.now()
+    
 def main():
     file = "playerData.csv"
     player = "Patrick Mahomes II"
     data = read_playerData(file, player)
     avg = avg_stats(data, 'qb')
     fantasy_avg = fantasy_conversion(avg, 'qb')
-    print(fantasy_avg)
+    get_week()
     
 
 if __name__ == "__main__":

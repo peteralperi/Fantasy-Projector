@@ -6,7 +6,7 @@ import xlwings as xw
 players_list = []
 players_list1 = []
 
-defense_choice = ["passing", "rushing", "receiving"]
+defense_choice = ["passing", "rushing"]
 
 for i in range(0,2):
 
@@ -42,7 +42,9 @@ for i in range(0,2):
             
 df = pd.DataFrame(players_list)
 df1 = pd.DataFrame(players_list1)
-            
+    
+df.to_csv("Fantasy-Projector/defenseStats.csv")  
+df1.to_csv("Fantasy-Projector/defenseStats.csv", mode= "a")
 
 # wb_name = "bigboy.xlsx"
 # sheet_name = "Defense"

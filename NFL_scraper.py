@@ -73,9 +73,9 @@ def qb_scraper():
     df1 = pd.DataFrame(qb_list)
     df2 = pd.DataFrame(qb_list)
 
-    df.to_csv("Fantasy-Projector/playerData.csv")               
-    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
-    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df.to_csv("playerData.csv")               
+    df1.to_csv("playerData.csv", mode= "a")
+    df2.to_csv("playerData.csv", mode= "a")
 
 def wr_scraper(): 
     wr_week1 = []
@@ -128,9 +128,9 @@ def wr_scraper():
     df = pd.DataFrame(wr_week1)
     df1 = pd.DataFrame(wr_week2)
     df2 = pd.DataFrame(wr_week3)
-    df.to_csv("Fantasy-Projector/playerData.csv", mode= "a")          
-    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
-    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df.to_csv("playerData.csv", mode= "a")          
+    df1.to_csv("playerData.csv", mode= "a")
+    df2.to_csv("playerData.csv", mode= "a")
 
 def rb_scraper():
     rb_week1 = []
@@ -189,9 +189,9 @@ def rb_scraper():
     RBdf1 = pd.DataFrame(rb_week2)
     RBdf2 = pd.DataFrame(rb_week3)
 
-    RBdf.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
-    RBdf1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")    
-    RBdf2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")    
+    RBdf.to_csv("playerData.csv", mode= "a")
+    RBdf1.to_csv("playerData.csv", mode= "a")    
+    RBdf2.to_csv("playerData.csv", mode= "a")    
 
 def te_scraper():
     wr_week1 = []
@@ -248,9 +248,9 @@ def te_scraper():
     df1 = pd.DataFrame(wr_week2)
     df2 = pd.DataFrame(wr_week3)
 
-    df.to_csv("Fantasy-Projector/playerData.csv", mode= "a")             
-    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
-    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df.to_csv("playerData.csv", mode= "a")             
+    df1.to_csv("playerData.csv", mode= "a")
+    df2.to_csv("playerData.csv", mode= "a")
 
 
 def k_scraper():
@@ -314,9 +314,45 @@ def k_scraper():
     df1 = pd.DataFrame(k_week2)
     df2 = pd.DataFrame(k_week3)
 
-    df.to_csv("Fantasy-Projector/playerData.csv", mode= "a")  
-    df1.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
-    df2.to_csv("Fantasy-Projector/playerData.csv", mode= "a")
+    df.to_csv("playerData.csv", mode= "a")  
+    df1.to_csv("playerData.csv", mode= "a")
+    df2.to_csv("playerData.csv", mode= "a")
+
+
+def player_scraper():
+    
+    url = ('https://www.pro-football-reference.com/years/2023/fantasy.htm#')
+
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find the table rows in the table containing fantasy stats
+    rows = soup.find_all('tr')
+    players_list=[]
+    # Loop through the rows to extract player names and teams
+    for row in rows:
+        dic = {}
+        player_td = row.find('td', {'data-stat': 'player'})
+        team_td = row.find('td', {'data-stat': 'team'})
+
+        if player_td and team_td:
+            player_name = player_td.get_text()
+            team_name = team_td.get_text()
+            if '*' in player_name:
+                player_name = player_name.replace('*', '')
+            
+            if '+' in player_name:
+                player_name = player_name.replace('+', '')
+            
+            dic['Player'] = player_name
+            dic['Team'] = team_name
+            players_list.append(dic)
+        
+
+    df = pd.DataFrame(players_list)
+    df.to_csv("Players.csv")
+
+
 
 
 
@@ -326,6 +362,7 @@ def main():
     wr_scraper()
     te_scraper()
     k_scraper()
+    player_scraper()
     print("Done.")
     
 
