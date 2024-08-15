@@ -358,7 +358,64 @@ def player_scraper():
 
 
 
+def defense_scraper():
+    players_list = []
+    players_list1 = []
 
+    defense_choice = ["passing", "rushing"]
+
+    for i in range(0,2):
+
+        url = 'https://www.nfl.com/stats/team-stats/defense/{}/2022/reg/all'.format(defense_choice[i])
+
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        rows = soup.find('table').find('tbody').find_all('tr')
+        
+        
+        
+        if i == 0:
+            for row in rows:
+                dic = {}
+                            
+                dic['Team'] = row.find('td').find('div', class_='d3-o-club-shortname').text
+                dic['pYds'] = row.find_all('td')[5].text
+                dic['pTds'] = row.find_all('td')[6].text
+                dic['ints'] = row.find_all('td')[7].text
+                for key in dic.keys():
+                    t = dic[key]
+                    if ' ' in t:
+                        t = t.replace(' ', '')
+                    if '\n' in t:
+                        t = t.replace('\n', '')
+                    dic[key] = t
+                players_list.append(dic) 
+                
+        if i == 1:
+            for row in rows:
+                dic1 = {}
+                            
+                dic1['Team'] = row.find('td').find('div', class_='d3-o-club-shortname').text
+                dic1['attempts'] = row.find_all('td')[1].text
+                dic1['ryds'] = row.find_all('td')[2].text
+                dic1['ypc'] = row.find_all('td')[3].text
+                dic1['rTds'] = row.find_all('td')[4].text
+                
+                for key in dic1.keys():
+                    t = dic1[key]
+                    if ' ' in t:
+                        t = t.replace(' ', '')
+                    if '\n' in t:
+                        t = t.replace('\n', '')
+                    dic1[key] = t
+                players_list1.append(dic1)
+                
+    df = pd.DataFrame(players_list)
+    df1 = pd.DataFrame(players_list1)
+
+    df.to_csv("defenseStats.csv")             
+    df1.to_csv("defenseStats.csv", mode= "a")
 
 def main():
     qb_scraper()

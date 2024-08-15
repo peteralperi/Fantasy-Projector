@@ -19,6 +19,16 @@ def get_team(file, player_name):
     if team:
         return team
 
+
+def get_opponent(team, week):
+    with open("2024_schedule.csv", mode='r', newline='') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            if row[0] == team:
+                    opponent = row[week]
+    return opponent
+
+
 def read_playerData(file_path, player_name):
     with open(file_path, mode='r', newline='') as file:
         csv_reader = csv.reader(file)
@@ -164,19 +174,82 @@ def fantasy_conversion(avg, pos):
 def get_week():
     cur_date = datetime.now()
     
+def analyze(base, opp, pos):
+    
+    team_names = {
+        'ARI': 'Cardinals',
+        'ATL': 'Falcons',
+        'BAL': 'Ravens',
+        'BUF': 'Bills',
+        'CAR': 'Panthers',
+        'CHI': 'Bears',
+        'CIN': 'Bengals',
+        'CLE': 'Browns',
+        'DAL': 'Cowboys',
+        'DEN': 'Broncos',
+        'DET': 'Lions',
+        'GB': 'Packers',
+        'HOU': 'Texans',
+        'IND': 'Colts',
+        'JAX': 'Jaguars',
+        'KC': 'Chiefs',
+        'LV': 'Raiders',
+        'LAR': 'Rams',
+        'LAC': 'Chargers',
+        'MIA': 'Dolphins',
+        'MIN': 'Vikings',
+        'NE': 'Patriots',
+        'NO': 'Saints',
+        'NYG': 'Giants',
+        'NYJ': 'Jets',
+        'PHI': 'Eagles',
+        'PIT': 'Steelers',
+        'SF': '49ers',
+        'SEA': 'Seahawks',
+        'TB': 'Buccaneers',
+        'TN': 'Titans',
+        'WSH': 'Commanders',
+    }
+    #defenseStats 1, team name     2, pyds/attempts    3, ptds/ryds   4, ints/ypc   
+    team_name = team_names[opp]
+    if pos == 'wr' or pos == 'te' or pos == 'rb':
+        with open('defenseStats.csv', mode='r', newline='') as file:
+            csv_reader = csv.reader(file)
+            i = 0
+            for row in csv_reader:
+                
+                t = row[1]
+                if ' ' in t:
+                    t = t.replace(' ', '')
+                if '\n' in t:
+                    t = t.replace('\n', '')
+                if t == team_name:
+                    team_stats = [row]
+                
+                    
+                i += 1
+                
+       
+        
+    
 def main():
     data_file = "playerData.csv"
     pos_file = "Players.csv"
     player = "Tyreek Hill" #This variable will be given from website
+    week = 1 #This variable will also be given. hopefully from datetime
     position = get_position(pos_file, player)
     position = position.lower() #Converts to lowercase for other functions
     team = get_team(pos_file, player)
-
+    
+    opponent = get_opponent(team, week)
+    if ' ' in opponent:
+        opponent = opponent.replace(' ', '')
+        
     player_stats = read_playerData(data_file, player)
     player_avg = avg_stats(player_stats, position)
     fantasy_avg = fantasy_conversion(player_avg, position)
-    # get_week()
-    print(fantasy_avg)
+    analyze(fantasy_avg, opponent, position)
+    
     
 
 if __name__ == "__main__":
