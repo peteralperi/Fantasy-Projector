@@ -366,7 +366,7 @@ def defense_scraper():
 
     for i in range(0,2):
 
-        url = 'https://www.nfl.com/stats/team-stats/defense/{}/2022/reg/all'.format(defense_choice[i])
+        url = 'https://www.nfl.com/stats/team-stats/defense/{}/2023/reg/all'.format(defense_choice[i])
 
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -397,10 +397,9 @@ def defense_scraper():
                 dic1 = {}
                             
                 dic1['Team'] = row.find('td').find('div', class_='d3-o-club-shortname').text
-                dic1['attempts'] = row.find_all('td')[1].text
                 dic1['ryds'] = row.find_all('td')[2].text
-                dic1['ypc'] = row.find_all('td')[3].text
                 dic1['rTds'] = row.find_all('td')[4].text
+                dic1['fumbs'] = row.find_all('td')[10].text
                 
                 for key in dic1.keys():
                     t = dic1[key]
@@ -424,6 +423,7 @@ def main():
     te_scraper()
     k_scraper()
     player_scraper()
+    defense_scraper()
     print("Done.")
     
 

@@ -36,6 +36,7 @@ def read_playerData(file_path, player_name):
         for row in csv_reader:
             if row[1] == player_name:
                     player_data.append(row) 
+    print(player_data)
     return player_data
 
 
@@ -103,7 +104,7 @@ def avg_stats(data, pos):
         for key in qb_stats.keys():
             if key != 'games':
                 qb_stats[key] = qb_stats[key] / qb_stats['games']
-                
+        
         return qb_stats
     
     
@@ -176,6 +177,13 @@ def get_week():
     
 def analyze(base, opp, pos):
     
+    league_avg_pyds = 0
+    league_avg_ptds = 0
+    league_avg_ints = 0
+    league_avg_ryds = 0
+    league_avg_rtds = 0
+    league_avg_fumbs = 0
+    
     team_names = {
         'ARI': 'Cardinals',
         'ATL': 'Falcons',
@@ -210,32 +218,169 @@ def analyze(base, opp, pos):
         'TN': 'Titans',
         'WSH': 'Commanders',
     }
-    #defenseStats 1, team name     2, pyds/attempts    3, ptds/ryds   4, ints/ypc   
+    
+    
+    
     team_name = team_names[opp]
-    if pos == 'wr' or pos == 'te' or pos == 'rb':
-        with open('defenseStats.csv', mode='r', newline='') as file:
-            csv_reader = csv.reader(file)
-            i = 0
-            for row in csv_reader:
+    
+    with open('defenseStats.csv', mode='r', newline='') as file:
+        csv_reader = csv.reader(file)
+        i = 1
+        for row in csv_reader:
+            if row[1] == team_name:
+                opp_pyds = int(row[2])
+                opp_ptds = int(row[3])
+                opp_ints = int(row[4])
                 
-                t = row[1]
-                if ' ' in t:
-                    t = t.replace(' ', '')
-                if '\n' in t:
-                    t = t.replace('\n', '')
-                if t == team_name:
-                    team_stats = [row]
+            if i > 1  and i <= 33:
+                league_avg_pyds += int(row[2])
+                league_avg_ptds += int(row[3])
+                league_avg_ints += int(row[4])
                 
+            
+            if i > 34  and i <= 67:
+                if row[1] == team_name:
+                    opp_ryds = int(row[2])
+                    opp_rtds = int(row[3])
+                    opp_fumbs = int(row[4])
+                league_avg_ryds += int(row[2])
+                league_avg_rtds += int(row[3])
+                league_avg_fumbs += int(row[4])
+
+            
+            i+=1
+        
+        
+        if pos != 'k':
+            league_avg_pyds /= 32
+            diff_pyds = league_avg_pyds - opp_pyds
+            if diff_pyds >= 0:
+                pyds_percent = diff_pyds / league_avg_pyds
+                if pyds_percent <.333:
+                    base += .6
+                elif pyds_percent <.666:
+                    base += 1.4
+                else:
+                    base += 2
+            else:
+                pyds_percent = abs(diff_pyds) / league_avg_pyds
+                if pyds_percent <.333:
+                    base -= .6
+                elif pyds_percent <.666:
+                    base -= 1.4
+                else:
+                    base -= 2
                     
-                i += 1
-                
+            
+            league_avg_ptds /= 32
+            
+            diff_ptds = league_avg_ptds - opp_ptds
+            if diff_ptds >= 0:
+                ptds_percent = diff_ptds / league_avg_ptds
+                if ptds_percent <.333:
+                    base += .6
+                elif ptds_percent <.666:
+                    base += 1.4
+                else:
+                    base += 2
+            else:
+                ptds_percent = abs(diff_ptds) / league_avg_ptds
+                if ptds_percent <.333:
+                    base -= .6
+                elif ptds_percent <.666:
+                    base -= 1.4
+                else:
+                    base -= 2
+            
+            league_avg_ints /= 32
+            
+            
+            if pos == 'qb':
+                diff_ints = league_avg_ints - opp_ints
+                if diff_ints >= 0:
+                    ints_percent = diff_ints / league_avg_ints
+                    if ints_percent <.333:
+                        base += .3
+                    elif ptds_percent <.666:
+                        base += .6
+                    else:
+                        base += .9
+                else:
+                    ints_percent = abs(diff_ints) / league_avg_ints
+                    if ints_percent <.333:
+                        base -= .3
+                    elif ints_percent <.666:
+                        base -= .6
+                    else:
+                        base -= .9
+                        
+        if pos == 'rb':     
+            league_avg_ryds /= 32
+            diff_ryds = league_avg_ryds - opp_ryds
+            if diff_ryds >= 0:
+                ryds_percent = diff_ryds / league_avg_ryds
+                if ryds_percent <.333:
+                    base += .6
+                elif ryds_percent <.666:
+                    base += 1.4
+                else:
+                    base += 2
+            else:
+                ryds_percent = abs(diff_ryds) / league_avg_ryds
+                if pyds_percent <.333:
+                    base -= .6
+                elif pyds_percent <.666:
+                    base -= 1.4
+                else:
+                    base -= 2
+            
+            
+            league_avg_rtds /= 32
+            diff_rtds = league_avg_rtds - opp_rtds
+            if diff_rtds >= 0:
+                rtds_percent = diff_rtds / league_avg_rtds
+                if rtds_percent <.333:
+                    base += .6
+                elif rtds_percent <.666:
+                    base += 1.4
+                else:
+                    base += 2
+            else:
+                rtds_percent = abs(diff_rtds) / league_avg_rtds
+                if ptds_percent <.333:
+                    base -= .6
+                elif ptds_percent <.666:
+                    base -= 1.4
+                else:
+                    base -= 2
+            league_avg_fumbs /= 32
+            diff_fumbs = league_avg_fumbs - opp_fumbs
+            if diff_fumbs >= 0:
+                fumbs_percent = diff_fumbs / league_avg_fumbs
+                if fumbs_percent <.333:
+                    base += .6
+                elif fumbs_percent <.666:
+                    base += 1.4
+                else:
+                    base += 2
+            else:
+                fumbs_percent = abs(diff_fumbs) / league_avg_fumbs
+                if fumbs_percent <.333:
+                    base -= .6
+                elif fumbs_percent <.666:
+                    base -= 1.4
+                else:
+                    base -= 2
+            
+    print(base)
+
        
         
     
 def main():
     data_file = "playerData.csv"
     pos_file = "Players.csv"
-    player = "Tyreek Hill" #This variable will be given from website
+    player = "Lamar Jackson" #This variable will be given from website
     week = 1 #This variable will also be given. hopefully from datetime
     position = get_position(pos_file, player)
     position = position.lower() #Converts to lowercase for other functions
@@ -244,6 +389,8 @@ def main():
     opponent = get_opponent(team, week)
     if ' ' in opponent:
         opponent = opponent.replace(' ', '')
+    if '@' in opponent:
+        opponent = opponent.replace('@', '')
         
     player_stats = read_playerData(data_file, player)
     player_avg = avg_stats(player_stats, position)
