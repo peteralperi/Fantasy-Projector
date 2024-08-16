@@ -1,8 +1,8 @@
 import csv
 from datetime import datetime
 
-def get_position(file, player_name):
-    with open(file, mode='r', newline='') as file:
+def get_position(player_name):
+    with open("Players.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
             if row[1] == player_name:
@@ -10,8 +10,8 @@ def get_position(file, player_name):
     if position:
         return position
     
-def get_team(file, player_name):
-    with open(file, mode='r', newline='') as file:
+def get_team(player_name):
+    with open("Players.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
             if row[1] == player_name:
@@ -29,8 +29,8 @@ def get_opponent(team, week):
     return opponent
 
 
-def read_playerData(file_path, player_name):
-    with open(file_path, mode='r', newline='') as file:
+def read_playerData(player_name):
+    with open("playerData.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         player_data = []
         for row in csv_reader:
@@ -378,13 +378,11 @@ def analyze(base, opp, pos):
         
     
 def main():
-    data_file = "playerData.csv"
-    pos_file = "Players.csv"
     player = "Lamar Jackson" #This variable will be given from website
     week = 1 #This variable will also be given. hopefully from datetime
-    position = get_position(pos_file, player)
+    position = get_position(player)
     position = position.lower() #Converts to lowercase for other functions
-    team = get_team(pos_file, player)
+    team = get_team(player)
     
     opponent = get_opponent(team, week)
     if ' ' in opponent:
@@ -392,7 +390,7 @@ def main():
     if '@' in opponent:
         opponent = opponent.replace('@', '')
         
-    player_stats = read_playerData(data_file, player)
+    player_stats = read_playerData(player)
     player_avg = avg_stats(player_stats, position)
     fantasy_avg = fantasy_conversion(player_avg, position)
     analyze(fantasy_avg, opponent, position)

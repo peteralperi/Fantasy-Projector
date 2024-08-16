@@ -20,9 +20,9 @@ import xlwings as xw
 
 
 def qb_scraper():
-    qb_list = []
-
-
+    qb_list1 = []
+    qb_list2 = []
+    qb_list3 = []
     for week in range(16,19):
         url = 'https://www.fantasypros.com/nfl/stats/qb.php?year=2023&week={}&range=week'.format(week)
         response = requests.get(url)
@@ -41,7 +41,7 @@ def qb_scraper():
                     dic['rTds'] = row.find_all('td')[12].text
                     dic['fumbs'] = row.find_all('td')[13].text
                     dic['games'] = row.find_all('td')[14].text
-                    qb_list.append(dic)
+                    qb_list1.append(dic)
                     
                 if week == 17:
                     dic1 = {}
@@ -54,7 +54,7 @@ def qb_scraper():
                     dic1['rTds'] = row.find_all('td')[12].text
                     dic1['fumbs'] = row.find_all('td')[13].text
                     dic1['games'] = row.find_all('td')[14].text
-                    qb_list.append(dic1)
+                    qb_list2.append(dic1)
                     
                 if week == 18:
                     dic2 = {}
@@ -67,11 +67,11 @@ def qb_scraper():
                     dic2['rTds'] = row.find_all('td')[12].text
                     dic2['fumbs'] = row.find_all('td')[13].text
                     dic2['games'] = row.find_all('td')[14].text
-                    qb_list.append(dic2)
+                    qb_list3.append(dic2)
    
-    df = pd.DataFrame(qb_list)
-    df1 = pd.DataFrame(qb_list)
-    df2 = pd.DataFrame(qb_list)
+    df = pd.DataFrame(qb_list1)
+    df1 = pd.DataFrame(qb_list2)
+    df2 = pd.DataFrame(qb_list3)
 
     df.to_csv("playerData.csv")               
     df1.to_csv("playerData.csv", mode= "a")
@@ -198,14 +198,14 @@ def te_scraper():
     wr_week2= []
     wr_week3= []
 
-    for week in range(9,19):
+    for week in range(16,19):
         url = 'https://www.fantasypros.com/nfl/stats/te.php?year=2023&week={}&range=week'.format(week)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
         rows = soup.find('table').find('tbody').find_all('tr')
             
         for row in rows:
-                if week == 9:
+                if week == 16:
                     dic = {}
                     
                     dic['Player'] = row.find('a').text
@@ -218,7 +218,7 @@ def te_scraper():
                     dic['games'] = row.find_all('td')[13].text
                     wr_week1.append(dic)
                     
-                if week == 10:
+                if week == 17:
                     dic1 = {}
 
                     dic1['Player'] = row.find('a').text
@@ -231,7 +231,7 @@ def te_scraper():
                     dic1['games'] = row.find_all('td')[13].text
                     wr_week2.append(dic1)
                     
-                if week == 11:
+                if week == 18:
                     dic2 = {}
 
                     dic2['Player'] = row.find('a').text
