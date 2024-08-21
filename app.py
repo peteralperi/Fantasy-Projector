@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, request, jsonify
-from randomer import generate_random_number, store_user_input
+from analyze import store_user_input
 
 app = Flask(__name__)
 
@@ -8,16 +8,11 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/generate', methods=['POST'])
-def generate():
-    number = generate_random_number()
-    return jsonify(number=number)
-
 @app.route('/store', methods=['POST'])
 def store():
     user_input = request.form['user_input']
-    stored_input = store_user_input(user_input)
-    return jsonify(stored_input=stored_input)
+    score = store_user_input(user_input)
+    return jsonify(score=score)
 
 if __name__ == '__main__':
     app.run(debug=True)

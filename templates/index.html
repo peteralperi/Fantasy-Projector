@@ -12,24 +12,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('https://example.com/background.jpg'); /* Replace with your image URL */
-            background-size: cover;
-            background-position: center;
+            background-color: #1e1e1e; /* Dark grey background */
             font-family: Arial, sans-serif;
         }
         #container {
             text-align: center;
         }
-        #generate-button, #submit-button {
-            padding: 10px 20px;
-            font-size: 16px;
+        #submit-button {
+            padding: 15px 30px; /* Increased size */
+            font-size: 18px; /* Increased font size */
             cursor: pointer;
             border: none;
-            background-color: #007BFF;
+            background-color: #FF0000; /* Red background color */
             color: white;
             border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 10px;
+            margin-top: 15px;
         }
         #result {
             margin-top: 20px;
@@ -38,11 +36,12 @@
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
         }
         #input-text {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 10px;
+            padding: 15px; /* Increased size */
+            font-size: 18px; /* Increased font size */
+            margin-top: 15px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            width: 300px; /* Increased width */
         }
     </style>
 </head>
@@ -50,7 +49,6 @@
     <div id="container">
         <input type="text" id="input-text" placeholder="Enter player name">
         <button id="submit-button">Submit</button>
-        <button id="generate-button">Press Me</button>
         <p id="result"></p>
     </div>
 
@@ -59,13 +57,7 @@
             $('#submit-button').click(function(){
                 var userInput = $('#input-text').val();
                 $.post('/store', {user_input: userInput}, function(data){
-                    alert('Stored input: ' + data.stored_input);
-                });
-            });
-
-            $('#generate-button').click(function(){
-                $.post('/generate', function(data){
-                    $('#result').text('Random Number: ' + data.number);
+                    $('#result').text('Score: ' + data.score);
                 });
             });
         });

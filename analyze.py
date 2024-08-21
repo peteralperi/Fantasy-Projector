@@ -1,7 +1,44 @@
 import csv
 from datetime import datetime
 
+
+def store_user_input(input_string):
+    global user_input
+    user_input = input_string
+    player = user_input
+    week = 1 #This variable will also be given. hopefully from datetime
+    position = get_position(player)
+    position = position.lower() #Converts to lowercase for other functions
+    team = get_team(player)
+    date = get_week()
+    print(date)
+    opponent = get_opponent(team, week)
+    if ' ' in opponent:
+        opponent = opponent.replace(' ', '')
+    if '@' in opponent:
+        opponent = opponent.replace('@', '')
+        
+    player_stats = read_playerData(player)
+    player_avg = avg_stats(player_stats, position)
+    
+    fantasy_avg = fantasy_conversion(player_avg, position)
+    
+    score = analyze(fantasy_avg, opponent, position)
+    score = round(score, 2)
+    print(score)
+
+    return score
+
+
+def get_week():
+    date = datetime.now()
+    currdate = date.strftime("%m/%Y")
+    return currdate
+    
+    
+
 def get_position(player_name):
+    position = ''
     with open("Players.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
@@ -36,12 +73,11 @@ def read_playerData(player_name):
         for row in csv_reader:
             if row[1] == player_name:
                     player_data.append(row) 
-    print(player_data)
     return player_data
 
 
 def avg_stats(data, pos):
-    if pos == 'wr' or pos == 'rb' or pos =='te': #wide receivers, running backs, and tight ends all share the same fantasy football relevant stats, called wr_stats
+    if pos == 'wr' or  pos =='te': #wide receivers, running backs, and tight ends all share the same fantasy football relevant stats, called wr_stats
         wr_stats = {
             'rYds': 0,
             'rTds': 0,
@@ -52,32 +88,53 @@ def avg_stats(data, pos):
             'games': 0
         }
         
-        if pos == 'rb':
-            for game in data:
-                wr_stats['rYds'] += int(game[2])
-                wr_stats['rTds'] += int(game[3])
-                wr_stats['recs'] += int(game[4])
-                wr_stats['recYds'] += int(game[5])
-                wr_stats['recTds'] += int(game[6])
-                wr_stats['fumbs'] += int(game[7])
-                wr_stats['games'] += int(game[8])
+        
         #,Player,recs,recYds,recTds,rYds,rTds,fumbs,games
-        if pos == 'wr' or pos == 'te':
-            for game in data:
-                wr_stats['rYds'] += int(game[5])
-                wr_stats['rTds'] += int(game[6])
-                wr_stats['recs'] += int(game[2])
-                wr_stats['recYds'] += int(game[3])
-                wr_stats['recTds'] += int(game[4])
-                wr_stats['fumbs'] += int(game[7])
-                wr_stats['games'] += int(game[8])
+        
+        for game in data:
+            wr_stats['rYds'] += int(game[5])
+            wr_stats['rTds'] += int(game[6])
+            wr_stats['recs'] += int(game[2])
+            wr_stats['recYds'] += int(game[3])
+            wr_stats['recTds'] += int(game[4])
+            wr_stats['fumbs'] += int(game[7])
+            wr_stats['games'] += int(game[8])
        
+       
+
         
         for key in wr_stats.keys():
             if key != 'games':
                 wr_stats[key] = wr_stats[key] / wr_stats['games']
                 
         return wr_stats
+    
+    if pos == 'rb':
+        rb_stats = {
+            'rYds': 0,
+            'rTds': 0,
+            'recs': 0,
+            'recYds': 0,
+            'recTds': 0,
+            'fumbs' : 0,
+            'games' : 0
+        }
+        
+        
+        for game in data:
+            rb_stats['rYds'] += int(game[2])
+            rb_stats['rTds'] += int(game[3])
+            rb_stats['recs'] += int(game[4])
+            rb_stats['recYds'] += int(game[5])
+            rb_stats['recTds'] += int(game[6])
+            rb_stats['fumbs'] += int(game[7])
+            rb_stats['games'] += int(game[8])
+
+        for key in rb_stats.keys():
+            if key != 'games':
+                rb_stats[key] = rb_stats[key] / rb_stats['games']
+                
+        return rb_stats
     
     #,Player,pYds,pTds,ints,rYds,rTds,fumbs,games
     if pos == 'qb':
@@ -212,7 +269,7 @@ def analyze(base, opp, pos):
         'NYJ': 'Jets',
         'PHI': 'Eagles',
         'PIT': 'Steelers',
-        'SF': '49ers',
+        'SFO': '49ers',
         'SEA': 'Seahawks',
         'TB': 'Buccaneers',
         'TN': 'Titans',
@@ -372,18 +429,18 @@ def analyze(base, opp, pos):
                 else:
                     base -= 2
             
-    print(base)
+    return base
 
        
         
     
 def main():
-    player = "Lamar Jackson" #This variable will be given from website
+    player = "Breece Hall" #This variable will be given from website
     week = 1 #This variable will also be given. hopefully from datetime
     position = get_position(player)
     position = position.lower() #Converts to lowercase for other functions
     team = get_team(player)
-    
+    get_week()
     opponent = get_opponent(team, week)
     if ' ' in opponent:
         opponent = opponent.replace(' ', '')
@@ -392,9 +449,11 @@ def main():
         
     player_stats = read_playerData(player)
     player_avg = avg_stats(player_stats, position)
-    fantasy_avg = fantasy_conversion(player_avg, position)
-    analyze(fantasy_avg, opponent, position)
     
+    fantasy_avg = fantasy_conversion(player_avg, position)
+    
+    score = analyze(fantasy_avg, opponent, position)
+    print(score)
     
 
 if __name__ == "__main__":
