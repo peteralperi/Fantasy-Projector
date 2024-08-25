@@ -1,11 +1,10 @@
 # Fantasy-Projector
 
-Description:
-- Utilized Python, Pandas, Openpyxl, Excel, and BeautifulSoup4, to WebScrape weekly NFL player data and convert it to an Excel spreadsheet. 
-- Gives a prediction of how many Fantasy Football points a player will score based on opponent defense statistics and rankings, and individual player data from previous weeks.
+About Pete's Projector:
+Pete's Projector is a project that takes in an NFL player from the user and returns a projected fantasy football score for that player, based on the player's opponent and performance in the previous three weeks of play. The project uses Flask and pythonanywhere to deploy the user interface. The link to the website can be found [here](https://peteralperi15.pythonanywhere.com). To use the projector, all you have to do is type in the players name (First Last with correct capitalization), and the score will be outputted below the textbox!
 
 
-Notes:
-- Projections are based on individual player data from their previous ten performances. If the player is a rookie, it will only take into account the games they have played during the first year of the NFL season.
-- Projections are also based on strength of defense, as this projector only projects player scores for offensive skill players.
-- To get projection, user must first run all of the scraper scripts to get the data into the "bigboy" file, where main can then be ran to create a projection.
+
+
+
+
