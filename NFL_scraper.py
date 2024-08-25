@@ -2,11 +2,12 @@
 
 Author: Peter Alperi
 
-This will be the file that scrapes all the player statistics into the ________.csv file.
+This is the file that scrapes all the player statistics into the appropiate .csv files.
 
 This scraper will get statistics of players from all fantasy relevant positions, including
 Quarterback (QB), Running Back (RB), Wide Receiver (WR), Tight End (TE), and Kicker (K).
-
+Along with the positions listed above, the scraper also has functions to scrape for player names, 
+team abbreviations, and defensive statistics.
 
 
 '''

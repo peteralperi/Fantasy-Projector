@@ -1,6 +1,29 @@
+'''
+Author: Peter Alperi
+
+This is the file that performs the projection analysis based on the users input.
+
+This file contains all of the functions that produce the projection, including getting
+the current NFL week, the players position, the team they are playing according to that players'
+schedule, the players' last three weeks of data, and the analysis on that data. 
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
 import csv
 from datetime import datetime
 def getWeek():
+    #converts date to integer values and compares it to determine what week of the NFL season it is.
     
     date = datetime.now()
     week = 0
@@ -49,17 +72,18 @@ def getWeek():
     return week
 
 def store_user_input(input_string):
-    global user_input
+    global user_input #global value containing the player the user inputted
     try:
         user_input = input_string
         player = user_input
-        week = getWeek()
+        week = getWeek()    
         position = get_position(player)
         position = position.lower() #Converts to lowercase for other functions
         team = get_team(player)
         date = get_week()
-        print(date)
         opponent = get_opponent(team, week)
+        
+        #remove whitespace and the '@' in the opponent abbreviation.
         if ' ' in opponent:
             opponent = opponent.replace(' ', '')
         if '@' in opponent:
@@ -70,6 +94,7 @@ def store_user_input(input_string):
         
         fantasy_avg = fantasy_conversion(player_avg, position)
         
+        #gets score and rounds to two decimal places.
         score = analyze(fantasy_avg, opponent, position)
         score = round(score, 2)
     except Exception:
@@ -80,6 +105,7 @@ def store_user_input(input_string):
     
 
 def get_position(player_name):
+    #goes through Players.csv file to get player position (wr, qb, te...).
     position = ''
     with open("Players.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
@@ -90,6 +116,7 @@ def get_position(player_name):
         return position
     
 def get_team(player_name):
+    #goes through players.csv file to get team the player plays for.
     with open("Players.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
@@ -100,6 +127,8 @@ def get_team(player_name):
 
 
 def get_opponent(team, week):
+    
+    #uses the 2024 schedule to find opponent based on team and current week.
     with open("2024_schedule.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
@@ -109,6 +138,8 @@ def get_opponent(team, week):
 
 
 def read_playerData(player_name):
+    
+    #searches through the player data and gets the players' most recent three games.
     with open("playerData.csv", mode='r', newline='') as file:
         csv_reader = csv.reader(file)
         player_data = []
@@ -119,7 +150,9 @@ def read_playerData(player_name):
 
 
 def avg_stats(data, pos):
-    if pos == 'wr' or  pos =='te': #wide receivers, running backs, and tight ends all share the same fantasy football relevant stats, called wr_stats
+    #function returns the average stats over the three game span.
+    
+    if pos == 'wr' or  pos =='te':
         wr_stats = {
             'rYds': 0,
             'rTds': 0,
@@ -129,9 +162,7 @@ def avg_stats(data, pos):
             'fumbs': 0,
             'games': 0
         }
-        
-        
-        #,Player,recs,recYds,recTds,rYds,rTds,fumbs,games
+       
         
         for game in data:
             wr_stats['rYds'] += int(game[5])
@@ -141,10 +172,7 @@ def avg_stats(data, pos):
             wr_stats['recTds'] += int(game[4])
             wr_stats['fumbs'] += int(game[7])
             wr_stats['games'] += int(game[8])
-       
-       
-
-        
+         
         for key in wr_stats.keys():
             if key != 'games':
                 wr_stats[key] = wr_stats[key] / wr_stats['games']
@@ -162,7 +190,6 @@ def avg_stats(data, pos):
             'games' : 0
         }
         
-        
         for game in data:
             rb_stats['rYds'] += int(game[2])
             rb_stats['rTds'] += int(game[3])
@@ -177,8 +204,7 @@ def avg_stats(data, pos):
                 rb_stats[key] = rb_stats[key] / rb_stats['games']
                 
         return rb_stats
-    
-    #,Player,pYds,pTds,ints,rYds,rTds,fumbs,games
+
     if pos == 'qb':
         qb_stats = {
             'pYds': 0,
@@ -189,8 +215,7 @@ def avg_stats(data, pos):
             'fumbs': 0,
             'games': 0
         }
-        
-        
+   
         for game in data:
             qb_stats['pYds'] += int(game[2])
             qb_stats['pTds'] += int(game[3])
@@ -206,8 +231,7 @@ def avg_stats(data, pos):
         
         return qb_stats
     
-    
-    #,Player,FG,FGA,1-19,20-29,30-39,40-49,50+,XPT,games
+
     if pos == 'k':
         k_stats = { 
             'FG': 0,
@@ -240,10 +264,9 @@ def avg_stats(data, pos):
         return k_stats
         
         
-
-
-
 def fantasy_conversion(avg, pos):
+    
+    #takes the average statistics and converts the values into the "base" fantasy point value
     base_fantasy = 0
     if pos == 'wr' or pos == 'te' or pos == 'rb':
         base_fantasy += avg['rYds'] / 10
@@ -271,11 +294,9 @@ def fantasy_conversion(avg, pos):
             
     return base_fantasy
 
-def get_week():
-    cur_date = datetime.now()
     
 def analyze(base, opp, pos):
-    
+    #takes into account how good the opponent they are playing is and adjusts the base fantasy points value as needed.
     league_avg_pyds = 0
     league_avg_ptds = 0
     league_avg_ints = 0
@@ -474,27 +495,4 @@ def analyze(base, opp, pos):
     return base
 
        
-        
     
-def main():
-    player = "Breece Hall" 
-    week = getWeek() 
-    position = get_position(player)
-    position = position.lower() #Converts to lowercase for other functions
-    team = get_team(player)
-    opponent = get_opponent(team, week)
-    if ' ' in opponent:
-        opponent = opponent.replace(' ', '')
-    if '@' in opponent:
-        opponent = opponent.replace('@', '')
-    get_week()
-    player_stats = read_playerData(player)
-    player_avg = avg_stats(player_stats, position)
-    
-    fantasy_avg = fantasy_conversion(player_avg, position)
-    
-    score = analyze(fantasy_avg, opponent, position)
-    
-
-if __name__ == "__main__":
-    main()
