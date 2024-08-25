@@ -1,40 +1,82 @@
 import csv
 from datetime import datetime
-
+def getWeek():
+    
+    date = datetime.now()
+    week = 0
+    year = date.year
+    month = date.month
+    day = date.day
+    if year == 2024 and month == 8 and day <= 31:
+        week=1
+    elif year == 2024 and month <= 9 and day <=9:
+        week=1
+    elif year == 2024 and month <= 9 and day <=16:
+        week=2
+    elif year == 2024 and month <= 9 and day <=23:
+        week=3
+    elif year == 2024 and month <= 9 and day <=30:
+        week=4
+    elif year == 2024 and month <= 10 and day <=7:
+        week=5
+    elif year == 2024 and month <= 10 and day <=14:
+        week=6
+    elif year == 2024 and month <= 10 and day <=21:
+        week=7
+    elif year == 2024 and month <= 10 and day <=28:
+        week=8
+    elif year == 2024 and month <= 11 and day <=4:
+        week=9
+    elif year == 2024 and month <= 11 and day <=11:
+        week=10
+    elif year == 2024 and month <= 11 and day <=18:
+        week=11
+    elif year == 2024 and month <= 11 and day <=25:
+        week=12
+    elif year == 2024 and month <= 12 and day <=2:
+        week=13
+    elif year == 2024 and month <= 12 and day <=9:
+        week=14
+    elif year == 2024 and month <= 12 and day <=16:
+        week=15
+    elif year == 2024 and month <= 12 and day <=23:
+        week=16
+    elif year == 2024 and month <= 12 and day <=30:
+        week=17
+    elif year == 2025 and month == 1 and day <=5:
+        week=18
+    
+    return week
 
 def store_user_input(input_string):
     global user_input
-    user_input = input_string
-    player = user_input
-    week = 1 #This variable will also be given. hopefully from datetime
-    position = get_position(player)
-    position = position.lower() #Converts to lowercase for other functions
-    team = get_team(player)
-    date = get_week()
-    print(date)
-    opponent = get_opponent(team, week)
-    if ' ' in opponent:
-        opponent = opponent.replace(' ', '')
-    if '@' in opponent:
-        opponent = opponent.replace('@', '')
+    try:
+        user_input = input_string
+        player = user_input
+        week = getWeek()
+        position = get_position(player)
+        position = position.lower() #Converts to lowercase for other functions
+        team = get_team(player)
+        date = get_week()
+        print(date)
+        opponent = get_opponent(team, week)
+        if ' ' in opponent:
+            opponent = opponent.replace(' ', '')
+        if '@' in opponent:
+            opponent = opponent.replace('@', '')
+            
+        player_stats = read_playerData(player)
+        player_avg = avg_stats(player_stats, position)
         
-    player_stats = read_playerData(player)
-    player_avg = avg_stats(player_stats, position)
-    
-    fantasy_avg = fantasy_conversion(player_avg, position)
-    
-    score = analyze(fantasy_avg, opponent, position)
-    score = round(score, 2)
-    print(score)
+        fantasy_avg = fantasy_conversion(player_avg, position)
+        
+        score = analyze(fantasy_avg, opponent, position)
+        score = round(score, 2)
+    except Exception:
+        score = "Player not found. Double check your spelling!"
 
     return score
 
-
-def get_week():
-    date = datetime.now()
-    currdate = date.strftime("%m/%Y")
-    return currdate
-    
     
 
 def get_position(player_name):
@@ -435,25 +477,23 @@ def analyze(base, opp, pos):
         
     
 def main():
-    player = "Breece Hall" #This variable will be given from website
-    week = 1 #This variable will also be given. hopefully from datetime
+    player = "Breece Hall" 
+    week = getWeek() 
     position = get_position(player)
     position = position.lower() #Converts to lowercase for other functions
     team = get_team(player)
-    get_week()
     opponent = get_opponent(team, week)
     if ' ' in opponent:
         opponent = opponent.replace(' ', '')
     if '@' in opponent:
         opponent = opponent.replace('@', '')
-        
+    get_week()
     player_stats = read_playerData(player)
     player_avg = avg_stats(player_stats, position)
     
     fantasy_avg = fantasy_conversion(player_avg, position)
     
     score = analyze(fantasy_avg, opponent, position)
-    print(score)
     
 
 if __name__ == "__main__":
